@@ -4,6 +4,7 @@ import "antd/dist/antd.css";
 import { Input, Card, Button, Modal, List } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import wilayasDataset from "./data/wilayas.json";
+import DairasModal from "./components/DairasModal";
 
 function App() {
   const [searchValue, setSearchValue] = useState("");
@@ -85,35 +86,15 @@ function App() {
           dataSource={results}
         />
       </Modal>
-      <Modal
+      <DairasModal
+        selectedWilaya={selectedWilaya}
         visible={dairasModalVisible}
-        onCancel={() => setDairasModalVisible(false)}
-        onOk={() => setDairasModalVisible(false)}
-        title={`${selectedWilaya?.name} دائرات`}
-      >
-        <List
-          dataSource={selectedWilaya?.dairas}
-          renderItem={(daira) => (
-            <List.Item
-              actions={[
-                <Button
-                  onClick={() => {
-                    setCommuneModalVisible(true);
-                    setSelectedDaira(daira);
-                  }}
-                >
-                  رؤية بلديات
-                </Button>,
-              ]}
-            >
-              <List.Item.Meta
-                title={daira.name}
-                description={`لديها ${(daira?.communes ?? []).length} بلديات`}
-              />
-            </List.Item>
-          )}
-        />
-      </Modal>
+        onClose={() => setDairasModalVisible(false)}
+        onShowDairaDetail={(daira) => {
+          setCommuneModalVisible(true);
+          setSelectedDaira(daira);
+        }}
+      />
       <Modal
         visible={communeModalVisible}
         onCancel={() => setCommuneModalVisible(false)}
